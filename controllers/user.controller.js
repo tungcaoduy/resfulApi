@@ -3,7 +3,7 @@ const Users = require("../models/users");
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
 
-exports.get_all_user = (req, res, next) => {
+exports.login_user = (req, res, next) => {
   Users.find({ email: req.body.email })
     .exec()
     .then((user) => {
@@ -13,7 +13,6 @@ exports.get_all_user = (req, res, next) => {
         });
       }
       //   bcrypt.compare(req.body.password, user[0].password, (err, result) => {
-      console.log("=======", req.body.password, user[0].password);
 
       if (req.body.password !== user[0].password) {
         return res.status(401).json({
@@ -34,6 +33,7 @@ exports.get_all_user = (req, res, next) => {
         return res.status(200).json({
           message: "Auth Successful",
           token: token,
+          role: user[0].role,
         });
       }
       res.status(401).json({
@@ -55,14 +55,15 @@ exports.signup_user = (req, res, next) => {
           message: "Mail exist",
         });
       } else {
-        bcrypt.hash(req.body.password, 10, (err, hash) => {
-          if (err) {
-            return res.status(500).json({ error: err });
-          } else {
+        // bcrypt.hash(req.body.password, 10, (err, hash) => {
+          // if (err) {
+          //   return res.status(500).json({ error: err });
+          // } else {
             const user = new Users({
               _id: new mongoose.Types.ObjectId(),
               email: req.body.email,
-              password: hash,
+              password: req.body.password,
+              role: req.body.role,
             });
             user
               .save()
@@ -74,8 +75,8 @@ exports.signup_user = (req, res, next) => {
               .catch((err) => {
                 res.status(500).json({ error: err });
               });
-          }
-        });
+          // }
+        // });
       }
     })
     .catch((err) => {
