@@ -37,8 +37,16 @@ app.use(bodyParser.urlencoded({ extended: true }));
 //     }
 // });
 
-app.use("/api/products", middleware, productsRoute);
-app.use("/api/orders", middleware, ordersRoute);
+app.use(
+  "/api/products",
+  //  middleware,
+  productsRoute
+);
+app.use(
+  "/api/orders",
+  //  middleware,
+  ordersRoute
+);
 app.use("/api/users", usersRoute);
 
 app.use((req, res, next) => {
