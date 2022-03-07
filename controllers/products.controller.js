@@ -14,10 +14,6 @@ exports.get_all_product = (req, res, next) => {
                         name: doc.name,
                         price: doc.price,
                         productImage: doc.productImage,
-                        request: {
-                            type: 'GET_ALL_PRODUCT',
-                            url: 'http://localhost:3000/products/' + doc._id
-                        }
                     }
                 })
             }
@@ -33,10 +29,6 @@ exports.get_all_product = (req, res, next) => {
 };
 
 exports.post_product = (req, res, next) => {
-    console.log("a");
-
-    console.log(req.file);
-
     const product = new Product({
         _id: new mongoose.Types.ObjectId(),
         name: req.body.name,
@@ -54,15 +46,10 @@ exports.post_product = (req, res, next) => {
                     name: result.name,
                     price: result.price,
                     productImage: result.productImage,
-                    url: {
-                        type: 'POST',
-                        url: 'http://localhost:3000/products/' + result._id
-                    }
                 }
             });
         })
         .catch(err => {
-            console.log("a");
             res.status(500).json({ error: err })
         })
 };
@@ -77,10 +64,6 @@ exports.get_product_by_id = (req, res, next) => {
             res.status(200).json({
                 message: "Get By Id Success",
                 product: doc,
-                request: {
-                    type: 'GET_ID',
-                    url: 'http://localhost:3000/products/' + doc._id
-                }
             });
         })
         .catch(err => {
