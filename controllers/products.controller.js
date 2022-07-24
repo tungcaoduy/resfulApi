@@ -10,7 +10,7 @@ function validateObject(obj) {
 }
 
 exports.get_all_product = (req, res, next) => {
-  let { name, type, currentPage, perPage } = req.query;
+  let { name, type, price, currentPage, perPage } = req.query;
   if (!currentPage || !perPage) {
     return res.status(422).json({ message: "Please check params" });
   }
@@ -18,7 +18,8 @@ exports.get_all_product = (req, res, next) => {
   perPage = parseInt(perPage);
   const nameRegex = name ? new RegExp(name) : undefined;
   const typeRegex = type ? new RegExp(type) : undefined;
-  const findParams = validateObject({ name: nameRegex, type: typeRegex });
+  const priceRegex = price ? new RegExp(price) : undefined;
+  const findParams = validateObject({ name: nameRegex, type: typeRegex, price: priceRegex });
 
   Product.find(findParams)
     .select("name price _id image type")
